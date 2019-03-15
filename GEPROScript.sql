@@ -33,6 +33,8 @@ salario money,
 gradoEstudios VARCHAR(45),
 carrera VARCHAR(45),
 rfc VARCHAR(45),
+email varchar(45),
+valorGanado float default 0,
 idProyecto INT,
 CONSTRAINT pk_usuario PRIMARY KEY(idUsuario),
 CONSTRAINT fk_proyecto FOREIGN KEY(idProyecto) REFERENCES proyecto(idProyecto)
@@ -88,3 +90,37 @@ CONSTRAINT fk_usuario_actividades FOREIGN KEY(idUsuario) REFERENCES usuario(idUs
 
 )
 GO
+
+
+create procedure pa_registrarProyecto
+@nombreProyecto varchar(45),
+@inicioProyecto DATE,
+@finalProyecto DATE,
+@semanas INT,
+@presupuestoInicial MONEY,
+@reserva MONEY,
+@nombreUsuario VARCHAR(45),
+@primerApellido VARCHAR(45),
+@segundoApellido VARCHAR(45),
+@usuario VARCHAR(45),
+@pass VARCHAR(45),
+@salario money,
+@gradoEstudios VARCHAR(45),
+@carrera VARCHAR(45),
+@rfc VARCHAR(45),
+@email varchar(45)
+as
+begin
+insert into proyecto values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva)
+declare
+@idProyecto int 
+set @idProyecto= (Select top 1 idProyecto  from proyecto)
+insert into usuario values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Administrador',@salario,@gradoEstudios,@carrera,@rfc,@email,0,@idProyecto)
+end 
+GO
+
+exec pa_registrarProyecto 'GEPRO', '10-10-20','10-10-20',10,10000,1000,'Marco Antonio', 'Barajas','Durantes','Lider','pass',100,'TSU','TIC','BADM961103OLS','correo@gmail.com'
+
+select * from proyecto
+select * from usuario
+
