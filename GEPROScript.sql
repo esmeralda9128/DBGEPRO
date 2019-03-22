@@ -120,7 +120,6 @@ end
 GO
 
 exec pa_registrarProyecto 'GEPRO', '10-10-20','10-10-20',10,10000,1000,'Marco Antonio', 'Barajas','Durantes','Lider','pass',100,'TSU','TIC','BADM961103OLS','correo@gmail.com'
-
 select * from proyecto
 select * from usuario
 
