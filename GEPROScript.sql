@@ -116,14 +116,26 @@ create procedure pa_registrarProyecto
 @email varchar(45)
 as
 begin
-insert into proyecto values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva)
-declare @idProyecto int 
-set @idProyecto= (Select top 1 idProyecto  from proyecto)
-insert into usuario values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Líder del Proyecto',@salario,@gradoEstudios,@carrera,@rfc,@email,0,@idProyecto,2)
+insert into proyecto values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva);
+declare @idProyecto int ;
+set @idProyecto= (Select top 1 idProyecto  from proyecto order by idProyecto desc);
+insert into usuario values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Líder del Proyecto',@salario,@gradoEstudios,@carrera,@rfc,@email,0,@idProyecto,2);
 end 
 GO
 
 
-select * from proyecto inner join usuario on proyecto.idProyecto = usuario.idProyecto
-select * from usuario where nombre='Esmeralda' and primerApellido='' and segundoApellido=''
+--select * from usuario where nombre='Esmeralda' and primerApellido='' and segundoApellido=''
+--select * from proyecto inner join usuario on proyecto.idProyecto = usuario.idProyecto
 
+select * from proyecto order by idProyecto desc
+delete from usuario;
+truncate table usuario;
+delete from proyecto;
+truncate table proyecto;
+
+
+
+exec pa_registrarProyecto 'Proyecto 1','10/10/10','10/10/10',10,10000.00,1000.00,'Esmeralda','Rodríguez','Ramos','esmeralda','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
+exec pa_registrarProyecto 'Proyecto 2','10/10/10','10/10/10',10,10000.00,1000.00,'Daniel','Rodríguez','Ramos','daniel1','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
+
+select * from proyecto
