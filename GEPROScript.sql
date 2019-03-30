@@ -11,6 +11,8 @@ idAdministrador INT IDENTITY(1,1),
 nombre VARCHAR(45) not null,
 usuario VARCHAR(45) UNIQUE not null,
 pass varchar(45) not null,
+gradoEstudios VARCHAR(45)not null,
+carrera VARCHAR(45) not null,
 CONSTRAINT pk_administrador PRIMARY KEY(idAdministrador)
 )
 GO
@@ -22,6 +24,8 @@ finalProyecto DATE,
 semanas INT not null,
 presupuestoInicial MONEY not null,
 reserva MONEY ,
+valorPlaneado float default 0.0,
+valorGanado float default 0.0
 CONSTRAINT pk_proyecto PRIMARY KEY(idProyecto)
 )
 GO
@@ -38,7 +42,6 @@ gradoEstudios VARCHAR(45),
 carrera VARCHAR(45),
 rfc VARCHAR(45),
 email varchar(45),
-valorGanado float default 0,
 idProyecto INT,
 tipo int,
 CONSTRAINT pk_usuario PRIMARY KEY(idUsuario),
@@ -56,15 +59,6 @@ CONSTRAINT pk_recursosMateriales PRIMARY KEY(idRecursosMateriales),
 CONSTRAINT fk_proyecto_recursosMateriales FOREIGN KEY(idProyecto) REFERENCES proyecto(idProyecto)
 )
 GO
-CREATE TABLE recursosHumanos(
-idRecursosHumanos INT IDENTITY(1,1),
-idUsuario INT,
-idProyecto INT,
-CONSTRAINT pk_recursosHumanos PRIMARY KEY(idRecursosHumanos),
-CONSTRAINT fk_usuario_recursosHumanos FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario),
-CONSTRAINT fk_proyecto_recursosHumanos FOREIGN KEY(idProyecto) REFERENCES proyecto(idProyecto)
-)
-GO
 CREATE TABLE recursoComprado(
 idRecursoComprado INT IDENTITY(1,1),
 fecha DATE,
@@ -79,10 +73,11 @@ CREATE TABLE nomina(
 idNomina INT IDENTITY(1,1),
 fecha DATE,
 idProyecto INT,
-idRecursosHumanos INT,
+idUsuario INT,
+valorGanado float
 CONSTRAINT pk_nomina PRIMARY KEY(idNomina),
 CONSTRAINT fk_proyecto_nomina FOREIGN KEY(idProyecto) REFERENCES proyecto(idProyecto),
-CONSTRAINT fk_recursosHumanos_nomina FOREIGN KEY(idRecursosHumanos) REFERENCES recursosHumanos(idRecursosHumanos)
+CONSTRAINT fk_recursosHumanos_nomina FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario)
 )
 GO
 CREATE TABLE actividades(
@@ -97,6 +92,9 @@ CONSTRAINT fk_usuario_actividades FOREIGN KEY(idUsuario) REFERENCES usuario(idUs
 GO
 
 
+
+insert into administrador values('Miguel Rosemberg Del Pilar Degante','admin','pass');
+GO
 create procedure pa_registrarProyecto
 @nombreProyecto varchar(45),
 @inicioProyecto DATE,
@@ -116,10 +114,10 @@ create procedure pa_registrarProyecto
 @email varchar(45)
 as
 begin
-insert into proyecto values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva);
+insert into proyecto(nombre,inicioProyecto,finalProyecto,semanas,presupuestoInicial,reserva)values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva);
 declare @idProyecto int ;
 set @idProyecto= (Select top 1 idProyecto  from proyecto order by idProyecto desc);
-insert into usuario values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Líder del Proyecto',@salario,@gradoEstudios,@carrera,@rfc,@email,0,@idProyecto,2);
+insert into usuario(nombre,primerApellido,segundoApellido,usuario,pass,rol,salario,gradoEstudios,carrera,rfc,email,idProyecto,tipo) values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Líder del Proyecto',@salario,@gradoEstudios,@carrera,@rfc,@email,@idProyecto,2);
 end 
 GO
 
@@ -127,15 +125,30 @@ GO
 --select * from usuario where nombre='Esmeralda' and primerApellido='' and segundoApellido=''
 --select * from proyecto inner join usuario on proyecto.idProyecto = usuario.idProyecto
 
-select * from proyecto order by idProyecto desc
-delete from usuario;
-truncate table usuario;
-delete from proyecto;
-truncate table proyecto;
+
 
 
 
 exec pa_registrarProyecto 'Proyecto 1','10/10/10','10/10/10',10,10000.00,1000.00,'Esmeralda','Rodríguez','Ramos','esmeralda','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
 exec pa_registrarProyecto 'Proyecto 2','10/10/10','10/10/10',10,10000.00,1000.00,'Daniel','Rodríguez','Ramos','daniel1','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
 
+GO
+create procedure pa_eliminarProyecto
+@idProyecto int
+as
+begin
+delete from usuario where idProyecto =@idProyecto;
+delete from proyecto where idProyecto =@idProyecto;
+end
+
+
+insert into usuario (nombre,primerApellido,segundoApellido,usuario,pass,salario,gradoEstudios,carrera,rfc,email,rol,tipo,idProyecto) values ('Esmeralda','Rodríguez','Ramos','esmeralda1','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com','Programador',3,1)
+
+
+
+
 select * from proyecto
+
+
+
+select DATEDIFF(DAY, 18-03-2019, GETDATE())
