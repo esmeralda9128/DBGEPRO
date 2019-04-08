@@ -245,7 +245,7 @@ else
 return -1
 end
 end
-
+go
 
 create procedure pa_calcularCostoReal
 @idProyecto int
@@ -259,6 +259,5 @@ declare @costoReal money;
 set @costoReal = @materialesComprados+@nominasPagadas
 select (@costoReal) as CostoReal;
 end
-
-
+go
 
