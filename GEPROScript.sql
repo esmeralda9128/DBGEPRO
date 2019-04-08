@@ -251,6 +251,5 @@ declare @costoReal money;
 set @costoReal = @materialesComprados+@nominasPagadas
 select (@costoReal) as CostoReal;
 end
-
-
+go
 
