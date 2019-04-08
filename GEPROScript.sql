@@ -88,7 +88,8 @@ CONSTRAINT fk_recursosHumanos_nomina FOREIGN KEY(idUsuario) REFERENCES usuario(i
 GO
 CREATE TABLE actividades(
 idActividades INT IDENTITY(1,1),
-actividad VARCHAR(100),
+nombreActividad VARCHAR(100),
+descripcion varchar(100),
 fecha DATE,
 idUsuario INT,
 CONSTRAINT pk_actividades PRIMARY KEY(idActividades),
@@ -192,6 +193,8 @@ begin
 insert into recursosMateriales values (@nombre,@costoUnitario,@cantidad,@total,@idProyecto)
 end
 
+GO
+
 
 
 GO
@@ -233,12 +236,18 @@ declare @resta money
 set @total= (select total from recursosMateriales where idRecursosMateriales=@idMaterial);
 set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
 set @resta = (@actual-@total);
+begin
+if(@actual>@total)
+begin
 insert into recursoComprado(semana,idProyecto,idRecursosMateriales) values(@semana,@idProyecto,@idMaterial)
 update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
 end
+else
+return -1
+end
+end
+go
 
-
-GO
 create procedure pa_calcularCostoReal
 @idProyecto int
 as
@@ -253,3 +262,4 @@ select (@costoReal) as CostoReal;
 end
 go
 
+select * from usuario where idProyecto = 3 and tipo = 3;
