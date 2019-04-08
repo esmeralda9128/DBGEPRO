@@ -192,8 +192,6 @@ begin
 insert into recursosMateriales values (@nombre,@costoUnitario,@cantidad,@total,@idProyecto)
 end
 
-GO
-
 
 
 GO
@@ -235,18 +233,12 @@ declare @resta money
 set @total= (select total from recursosMateriales where idRecursosMateriales=@idMaterial);
 set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
 set @resta = (@actual-@total);
-begin
-if(@actual>@total)
-begin
 insert into recursoComprado(semana,idProyecto,idRecursosMateriales) values(@semana,@idProyecto,@idMaterial)
 update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
 end
-else
-return -1
-end
-end
 
 
+GO
 create procedure pa_calcularCostoReal
 @idProyecto int
 as
