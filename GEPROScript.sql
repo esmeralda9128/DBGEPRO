@@ -24,7 +24,7 @@ finalProyecto DATE,
 semanas INT not null,
 presupuestoInicial MONEY not null,
 reserva MONEY ,
-valorPlaneado float default 0.0,
+valorPlaneado money default 0.0,
 valorGanado float default 0.0,
 presupuestoActual money default 0.0
 CONSTRAINT pk_proyecto PRIMARY KEY(idProyecto)
@@ -79,7 +79,8 @@ fecha DATE,
 idProyecto INT,
 idUsuario INT,
 semana int,
-valorGanado float
+pagado money,
+valorGanado float default 0
 CONSTRAINT pk_nomina PRIMARY KEY(idNomina),
 CONSTRAINT fk_proyecto_nomina FOREIGN KEY(idProyecto) REFERENCES proyecto(idProyecto),
 CONSTRAINT fk_recursosHumanos_nomina FOREIGN KEY(idUsuario) REFERENCES usuario(idUsuario)
@@ -119,7 +120,9 @@ create procedure pa_registrarProyecto
 @email varchar(45)
 as
 begin
-insert into proyecto(nombre,inicioProyecto,finalProyecto,semanas,presupuestoInicial,reserva,presupuestoActual)values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva,@presupuestoInicial);
+declare @valorPlaneado money
+set @valorPlaneado=(@presupuestoInicial/@semanas);
+insert into proyecto(nombre,inicioProyecto,finalProyecto,semanas,presupuestoInicial,reserva,presupuestoActual,valorPlaneado)values(@nombreProyecto,@inicioProyecto,@finalProyecto,@semanas,@presupuestoInicial,@reserva,@presupuestoInicial,@valorPlaneado);
 declare @idProyecto int ;
 set @idProyecto= (Select top 1 idProyecto  from proyecto order by idProyecto desc);
 insert into usuario(nombre,primerApellido,segundoApellido,usuario,pass,rol,salario,gradoEstudios,carrera,rfc,email,idProyecto,tipo) values(@nombreUsuario,@primerApellido,@segundoApellido,@usuario,@pass,'Líder del Proyecto',@salario,@gradoEstudios,@carrera,@rfc,@email,@idProyecto,2);
@@ -189,7 +192,73 @@ begin
 insert into recursosMateriales values (@nombre,@costoUnitario,@cantidad,@total,@idProyecto)
 end
 
+GO
 
-use gepro
 
-select * from proyecto
+
+GO
+create procedure pa_pagarNomina
+@idUsuario int,
+@idProyecto int,
+@fecha DATE,
+@semana int
+as
+begin
+declare @salario money
+declare @actual money
+declare @resta money
+set @salario= ((select salario from usuario where idUsuario=@idUsuario)*40);
+set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
+set @resta = (@actual-@salario);
+begin
+if(@actual>@salario)
+begin
+insert into nomina (fecha,idProyecto,idUsuario,semana,pagado)values(@fecha,@idProyecto,@idUsuario,@semana,@salario);
+update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
+end
+else
+return -1
+end
+end
+
+GO
+create procedure pa_comprarMaterial
+@idProyecto int,
+@idMaterial int,
+@fecha date,
+@semana int
+as
+begin
+declare @total money
+declare @actual money
+declare @resta money
+set @total= (select total from recursosMateriales where idRecursosMateriales=@idMaterial);
+set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
+set @resta = (@actual-@total);
+begin
+if(@actual>@total)
+begin
+insert into recursoComprado(semana,idProyecto,idRecursosMateriales) values(@semana,@idProyecto,@idMaterial)
+update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
+end
+else
+return -1
+end
+end
+
+
+create procedure pa_calcularCostoReal
+@idProyecto int
+as
+begin
+declare @materialesComprados money;
+set @materialesComprados=(select SUM(total) from recursoComprado inner join recursosMateriales on recursoComprado.idRecursosMateriales= recursosMateriales.idRecursosMateriales where recursosMateriales.idProyecto=@idProyecto);
+declare @nominasPagadas money;
+set @nominasPagadas =(select sum(pagado) from nomina inner join usuario on nomina.idUsuario= usuario.idUsuario where usuario.idProyecto=@idProyecto);
+declare @costoReal money;
+set @costoReal = @materialesComprados+@nominasPagadas
+select (@costoReal) as CostoReal;
+end
+
+
+
