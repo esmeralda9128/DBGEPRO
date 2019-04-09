@@ -195,9 +195,6 @@ end
 
 GO
 
-
-
-GO
 create procedure pa_pagarNomina
 @idUsuario int,
 @idProyecto int,
@@ -263,3 +260,10 @@ end
 go
 
 select * from usuario where idProyecto = 3 and tipo = 3;
+
+insert into select * from usuario where idProyecto=1 and tipo=3
+
+select * from actividades where idUsuario;
+
+insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
+('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
