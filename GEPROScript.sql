@@ -267,3 +267,10 @@ select * from actividades where idUsuario;
 
 insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
 ('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
+
+
+select * from nomina
+insert into nomina(fecha,idProyecto,idUsuario,semana,pagado) values
+(GETDATE(),1,4,2,20000
+
+select usuario.nombre,usuario.rol,proyecto.nombre as proyecto, pagado, fecha as Fecha_Pago from usuario inner join nomina on usuario.idUsuario = nomina.idUsuario inner join proyecto on nomina.idProyecto = proyecto.idProyecto where nomina.idProyecto = 1
