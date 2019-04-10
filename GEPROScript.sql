@@ -199,7 +199,8 @@ create procedure pa_pagarNomina
 @idUsuario int,
 @idProyecto int,
 @fecha DATE,
-@semana int
+@semana int,
+@valor money
 as
 begin
 declare @salario money
@@ -208,16 +209,10 @@ declare @resta money
 set @salario= ((select salario from usuario where idUsuario=@idUsuario)*40);
 set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
 set @resta = (@actual-@salario);
-begin
-if(@actual>@salario)
-begin
-insert into nomina (fecha,idProyecto,idUsuario,semana,pagado)values(@fecha,@idProyecto,@idUsuario,@semana,@salario);
+insert into nomina (fecha,idProyecto,idUsuario,semana,pagado,valorGanado)values(@fecha,@idProyecto,@idUsuario,@semana,@salario,@valor);
 update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
 end
-else
-return -1
-end
-end
+
 
 GO
 create procedure pa_comprarMaterial
@@ -233,17 +228,10 @@ declare @resta money
 set @total= (select total from recursosMateriales where idRecursosMateriales=@idMaterial);
 set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
 set @resta = (@actual-@total);
-begin
-if(@actual>@total)
-begin
 insert into recursoComprado(semana,idProyecto,idRecursosMateriales) values(@semana,@idProyecto,@idMaterial)
 update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
 end
-else
-return -1
-end
-end
-go
+
 
 create procedure pa_calcularCostoReal
 @idProyecto int
@@ -267,10 +255,3 @@ select * from actividades where idUsuario;
 
 insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
 ('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
-
-
-select * from nomina
-insert into nomina(fecha,idProyecto,idUsuario,semana,pagado) values
-(GETDATE(),1,4,2,20000
-
-select usuario.nombre,usuario.rol,proyecto.nombre as proyecto, pagado, fecha as Fecha_Pago from usuario inner join nomina on usuario.idUsuario = nomina.idUsuario inner join proyecto on nomina.idProyecto = proyecto.idProyecto where nomina.idProyecto = 1
