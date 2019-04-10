@@ -305,41 +305,41 @@ go
 
 --select * from usuario
 
-GO
-select usuario.nombre,(select nombre from usuario where tipo = 2 and idProyecto = 1) as lider,usuario.rol,proyecto.nombre as proyecto, pagado, fecha as Fecha_Pago from usuario inner join nomina on usuario.idUsuario = nomina.idUsuario inner join proyecto on nomina.idProyecto = proyecto.idProyecto where nomina.idProyecto = 1
-GO
-SELECT recursosMateriales.nombre,
-	(select nombre from proyecto where idProyecto = 1) as proyecto,
-	(select nombre from usuario where idProyecto = 1 and tipo = 2) as lider,
-	recursosMateriales.costoUnitario,
-	recursosMateriales.cantidad,
-	recursosMateriales.total,
-	recursoComprado.fecha
-FROM recursosMateriales
-	inner join recursoComprado ON 
-	 recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
-WHERE 
-	 recursosMateriales.idProyecto = 1;
-GO
+--GO
+--select usuario.nombre,(select nombre from usuario where tipo = 2 and idProyecto = 1) as lider,usuario.rol,proyecto.nombre as proyecto, pagado, fecha as Fecha_Pago from usuario inner join nomina on usuario.idUsuario = nomina.idUsuario inner join proyecto on nomina.idProyecto = proyecto.idProyecto where nomina.idProyecto = 1
+--GO
+--SELECT recursosMateriales.nombre,
+--	(select nombre from proyecto where idProyecto = 1) as proyecto,
+--	(select nombre from usuario where idProyecto = 1 and tipo = 2) as lider,
+--	recursosMateriales.costoUnitario,
+--	recursosMateriales.cantidad,
+--	recursosMateriales.total,
+--	recursoComprado.fecha
+--FROM recursosMateriales
+--	inner join recursoComprado ON 
+--	 recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
+--WHERE 
+--	 recursosMateriales.idProyecto = 1;
+--GO
 
-SELECT usuario.nombre,
-	(SELECT usuario.nombre
-FROM usuario
-WHERE 
-	 usuario.tipo = 2 
-	 AND usuario.idProyecto = 1 ) AS lider,
-	usuario.rol,
-	proyecto.nombre AS proyecto,
-	nomina.pagado,
-	nomina.fecha AS Fecha_Pago,
-	(select sum(nomina.pagado) from nomina) as total
-FROM usuario
-	inner join nomina ON 
-	 usuario.idUsuario = nomina.idUsuario 
-	inner join proyecto ON 
-	 nomina.idProyecto = proyecto.idProyecto
-WHERE 
-	 nomina.idProyecto = 1;
-go
+--SELECT usuario.nombre,
+--	(SELECT usuario.nombre
+--FROM usuario
+--WHERE 
+--	 usuario.tipo = 2 
+--	 AND usuario.idProyecto = 1 ) AS lider,
+--	usuario.rol,
+--	proyecto.nombre AS proyecto,
+--	nomina.pagado,
+--	nomina.fecha AS Fecha_Pago,
+--	(select sum(nomina.pagado) from nomina) as total
+--FROM usuario
+--	inner join nomina ON 
+--	 usuario.idUsuario = nomina.idUsuario 
+--	inner join proyecto ON 
+--	 nomina.idProyecto = proyecto.idProyecto
+--WHERE 
+--	 nomina.idProyecto = 1;
+--go
 
 
