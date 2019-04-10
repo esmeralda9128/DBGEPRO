@@ -1,6 +1,6 @@
 
 
-exec pa_registrarProyecto 'Desarrollo del sistema para evitar fuga de información','2019-04-01','2019-05-03',5,100000,10000,'Pedro','Moreno','Duran','pemd','pass',100,'Ingeniero','Sistemas','PEMDH921102S0','pedromor92@gmail.com'
+exec pa_registrarProyecto 'Desarrollo del sistema de información','2019-04-01','2019-05-03',5,100000,10000,'Pedro','Moreno','Duran','pemd','pass',100,'Ingeniero','Sistemas','PEMDH921102S0','pedromor92@gmail.com'
 
 exec pa_registrarRecursoHumano 'Miguel Ángel','Pascal','Prieto','migeap','pass',10,'TSU', 'Sistemas Informáticos','MIAPP940411K', 'angelpascal9404@gmail.com','Programador',1
 exec pa_registrarRecursoHumano 'Sandra','Reyez','Ortiz','sanre','pass',10,'TSU', 'Sistemas Informáticos','SARO950803OS', 'sandratsu95@gmail.com','Diseñadora',1
