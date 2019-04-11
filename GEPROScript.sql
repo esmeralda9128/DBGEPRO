@@ -228,10 +228,10 @@ declare @resta money
 set @total= (select total from recursosMateriales where idRecursosMateriales=@idMaterial);
 set @actual = (select presupuestoActual from proyecto where idProyecto = @idProyecto)
 set @resta = (@actual-@total);
-insert into recursoComprado(semana,idProyecto,idRecursosMateriales) values(@semana,@idProyecto,@idMaterial)
+insert into recursoComprado(semana,idProyecto,idRecursosMateriales,fecha) values(@semana,@idProyecto,@idMaterial,@fecha)
 update proyecto set presupuestoActual=@resta where idProyecto=@idProyecto;
 end
-
+GO
 
 create procedure pa_calcularCostoReal
 @idProyecto int
@@ -247,12 +247,19 @@ select (@costoReal) as CostoReal;
 end
 go
 
-select * from usuario where idProyecto = 3 and tipo = 3;
+--select * from usuario where idProyecto = 3 and tipo = 3;
 
-insert into select * from usuario where idProyecto=1 and tipo=3
 
-select * from actividades where idUsuario;
+--insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
+--('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
 
+
+--select * from nomina
+--select * from usuario
+
+--update proyecto set valorGanado=10 where idProyecto=1;
+
+<<<<<<< HEAD
 insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
 ('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
 
@@ -264,3 +271,5 @@ insert into recursoComprado(fecha,idProyecto,idRecursosMateriales,semana) values
 ('2019-04-10',1,1,0),('2019-04-10',1,2,0)
 
 select nombre,costoUnitario,cantidad,total,fecha from recursosMateriales inner join recursoComprado on recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
+
+--select * from proyecto
