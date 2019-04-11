@@ -273,4 +273,23 @@ go
 ----select * from proyecto
 
 
-select * from usuario
+
+--select * from usuario
+
+GO
+select usuario.nombre,(select nombre from usuario where tipo = 2 and idProyecto = 1) as lider,usuario.rol,proyecto.nombre as proyecto, pagado, fecha as Fecha_Pago from usuario inner join nomina on usuario.idUsuario = nomina.idUsuario inner join proyecto on nomina.idProyecto = proyecto.idProyecto where nomina.idProyecto = 1
+GO
+SELECT recursosMateriales.nombre,
+	(select nombre from proyecto where idProyecto = 1) as proyecto,
+	(select nombre from usuario where idProyecto = 1 and tipo = 2) as lider,
+	recursosMateriales.costoUnitario,
+	recursosMateriales.cantidad,
+	recursosMateriales.total,
+	recursoComprado.fecha
+FROM recursosMateriales
+	inner join recursoComprado ON 
+	 recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
+WHERE 
+	 recursosMateriales.idProyecto = 1;
+	 GO
+
