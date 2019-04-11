@@ -255,3 +255,12 @@ select * from actividades where idUsuario;
 
 insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
 ('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
+
+select * from recursoComprado
+
+execute pa_comprarMaterial 1,1,'2019-04-10',0;
+
+insert into recursoComprado(fecha,idProyecto,idRecursosMateriales,semana) values
+('2019-04-10',1,1,0),('2019-04-10',1,2,0)
+
+select nombre,costoUnitario,cantidad,total,fecha from recursosMateriales inner join recursoComprado on recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
