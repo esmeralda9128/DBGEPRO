@@ -138,9 +138,7 @@ GO
 
 
 
-exec pa_registrarProyecto 'Proyecto 1','10/10/10','10/11/10',10,10000.00,1000.00,'Esmeralda','Rodríguez','Ramos','esmeralda','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
-exec pa_registrarProyecto 'Proyecto 2','10/10/10','10/12/10',10,10000.00,1000.00,'Daniel','Rodríguez','Ramos','daniel1','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
-exec pa_registrarProyecto 'Proyecto 3','2019/04/01','2019/05/03',10,10000.00,1000.00,'Daniel','Rodríguez','Herrera','daniel20','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
+exec pa_registrarProyecto 'Proyecto 1','2019/04/01','2019/05/03',10,10000.00,1000.00,'Daniel','Rodríguez','Herrera','daniel20','x',10000.00,'TSU','Sistemas','DSASD','dasda@gmal.com'
 
 GO
 create procedure pa_eliminarProyecto
@@ -259,17 +257,20 @@ go
 
 --update proyecto set valorGanado=10 where idProyecto=1;
 
-<<<<<<< HEAD
-insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
-('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
 
-select * from recursoComprado
+--insert into actividades (nombreActividad,descripcion,fecha,idUsuario) values
+--('Programar','Se programo un modulo bine padriuris','2017-05-10',4);
 
-execute pa_comprarMaterial 1,1,'2019-04-10',0;
+--select * from recursoComprado
 
-insert into recursoComprado(fecha,idProyecto,idRecursosMateriales,semana) values
-('2019-04-10',1,1,0),('2019-04-10',1,2,0)
+--execute pa_comprarMaterial 1,1,'2019-04-10',0;
 
-select nombre,costoUnitario,cantidad,total,fecha from recursosMateriales inner join recursoComprado on recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
+--insert into recursoComprado(fecha,idProyecto,idRecursosMateriales,semana) values
+--('2019-04-10',1,1,0),('2019-04-10',1,2,0)
 
---select * from proyecto
+--select nombre,costoUnitario,cantidad,total,fecha from recursosMateriales inner join recursoComprado on recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
+
+----select * from proyecto
+
+
+select * from usuario
