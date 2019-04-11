@@ -245,6 +245,17 @@ select (@costoReal) as CostoReal;
 end
 go
 
+create procedure pa_registrarActividades(
+@nombreActividad varchar(100),
+@descripcion varchar(100),
+@idUsuario int
+)
+as
+begin
+insert into actividades(nombreActividad,descripcion,fecha,idUsuario) values(@nombreActividad,@descripcion,GETDATE(),@idUsuario);
+end
+go
+
 --select * from usuario where idProyecto = 3 and tipo = 3;
 
 
@@ -312,3 +323,5 @@ FROM usuario
 WHERE 
 	 nomina.idProyecto = 1;
 go
+
+select * from actividades
