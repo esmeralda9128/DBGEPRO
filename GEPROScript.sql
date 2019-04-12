@@ -293,3 +293,7 @@ WHERE
 	 recursosMateriales.idProyecto = 1;
 	 GO
 
+
+	 select * from recursoComprado
+
+	 exec pa_calcularCostoReal 1
