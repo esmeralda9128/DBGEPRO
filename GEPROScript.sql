@@ -145,10 +145,19 @@ create procedure pa_eliminarProyecto
 @idProyecto int
 as
 begin
-delete from usuario where idProyecto =@idProyecto;
-delete from proyecto where idProyecto =@idProyecto;
+delete from nomina where idProyecto =@idProyecto
+delete from usuario where idProyecto =@idProyecto
+delete from recursoComprado where idProyecto=@idProyecto
+delete from recursosMateriales where idProyecto=@idProyecto
 end
+GO
 
+create procedure pa_eliminarActividades
+@idUsuario int
+as
+begin
+delete from actividades where idUsuario =@idUsuario
+end
 
 GO
 create procedure pa_consultarDiferenciaDias
@@ -236,9 +245,18 @@ create procedure pa_calcularCostoReal
 as
 begin
 declare @materialesComprados money;
+declare @verificar int
+set @verificar = (select count (idRecursoComprado) from recursoComprado where idProyecto=@idProyecto)
+if(@verificar>0)
 set @materialesComprados=(select SUM(total) from recursoComprado inner join recursosMateriales on recursoComprado.idRecursosMateriales= recursosMateriales.idRecursosMateriales where recursosMateriales.idProyecto=@idProyecto);
+else
+set @materialesComprados=0
 declare @nominasPagadas money;
+set @verificar = (select count (idNomina) from nomina where idProyecto=@idProyecto)
+if(@verificar>0)
 set @nominasPagadas =(select sum(pagado) from nomina inner join usuario on nomina.idUsuario= usuario.idUsuario where usuario.idProyecto=@idProyecto);
+else
+set @nominasPagadas =0;
 declare @costoReal money;
 set @costoReal = @materialesComprados+@nominasPagadas
 select (@costoReal) as CostoReal;
@@ -325,6 +343,3 @@ WHERE
 go
 
 
-	 select * from recursoComprado
-
-	 exec pa_calcularCostoReal 1
