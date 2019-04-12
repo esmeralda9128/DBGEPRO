@@ -245,6 +245,17 @@ select (@costoReal) as CostoReal;
 end
 go
 
+create procedure pa_registrarActividades(
+@nombreActividad varchar(100),
+@descripcion varchar(100),
+@idUsuario int
+)
+as
+begin
+insert into actividades(nombreActividad,descripcion,fecha,idUsuario) values(@nombreActividad,@descripcion,GETDATE(),@idUsuario);
+end
+go
+
 --select * from usuario where idProyecto = 3 and tipo = 3;
 
 
@@ -291,7 +302,27 @@ FROM recursosMateriales
 	 recursoComprado.idRecursosMateriales = recursosMateriales.idRecursosMateriales
 WHERE 
 	 recursosMateriales.idProyecto = 1;
-	 GO
+GO
+
+SELECT usuario.nombre,
+	(SELECT usuario.nombre
+FROM usuario
+WHERE 
+	 usuario.tipo = 2 
+	 AND usuario.idProyecto = 1 ) AS lider,
+	usuario.rol,
+	proyecto.nombre AS proyecto,
+	nomina.pagado,
+	nomina.fecha AS Fecha_Pago,
+	(select sum(nomina.pagado) from nomina) as total
+FROM usuario
+	inner join nomina ON 
+	 usuario.idUsuario = nomina.idUsuario 
+	inner join proyecto ON 
+	 nomina.idProyecto = proyecto.idProyecto
+WHERE 
+	 nomina.idProyecto = 1;
+go
 
 
 	 select * from recursoComprado
